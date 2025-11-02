@@ -1,16 +1,26 @@
 {
   "manifest_version": 3,
-  "name": "Article Extractor",
+  "name": "Page Clipper",
   "version": "1.0.0",
-  "description": "Extracts article information when the extension action is clicked.",
+  "description": "Clip the selected text from the current tab to the clipboard.",
   "permissions": [
+    "activeTab",
     "scripting",
-    "activeTab"
+    "clipboardWrite"
+  ],
+  "optional_permissions": [
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Extract article details"
+    "default_popup": "popup.html",
+    "default_title": "Clip selection"
+  },
+  "commands": {
+    "clip-selection": {
+      "description": "Clip the selection on the active tab"
+    }
   }
 }
