@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Page Clipper",
+  "version": "1.0.0",
+  "description": "Clip the selected text from the current tab to the clipboard.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "clipboardWrite"
+  ],
+  "optional_permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Clip selection"
+  },
+  "commands": {
+    "clip-selection": {
+      "description": "Clip the selection on the active tab"
+    }
+  }
+}
