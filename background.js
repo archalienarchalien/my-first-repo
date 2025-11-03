@@ -72,6 +72,20 @@ chrome.commands.onCommand.addListener(async (command) => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === "articleExtracted") {
+    if (message?.payload) {
+      console.debug("Received extracted article payload", message.payload);
+    }
+
+    try {
+      sendResponse({ acknowledged: true });
+    } catch (error) {
+      console.warn("Unable to acknowledge article extraction message:", error);
+    }
+
+    return;
+  }
+
   if (message?.type !== "clip-selection") {
     return;
   }
