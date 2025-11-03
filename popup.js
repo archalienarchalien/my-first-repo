@@ -16,11 +16,13 @@ async function clipSelectionFromPopup() {
       return;
     }
 
-    const selectionPreview = response.selection.length > 80
-      ? `${response.selection.slice(0, 77)}…`
-      : response.selection;
+    const tanaPaste = response.tanaPaste ?? "";
+    const previewSource = tanaPaste.split("\n")[0] ?? "";
+    const selectionPreview = previewSource.length > 80
+      ? `${previewSource.slice(0, 77)}…`
+      : previewSource;
 
-    setStatus(`Copied: "${selectionPreview}"`);
+    setStatus(selectionPreview ? `Copied: "${selectionPreview}"` : "Clipping copied to clipboard.");
   } catch (error) {
     setStatus(error instanceof Error ? error.message : String(error), true);
   }
