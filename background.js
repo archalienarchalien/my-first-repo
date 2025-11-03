@@ -11,21 +11,13 @@ async function clipSelection(tabId) {
   try {
     const [injection] = await chrome.scripting.executeScript({
       target: { tabId },
-      func: async () => {
+      func: () => {
         const selection = window.getSelection()?.toString() ?? "";
         if (!selection) {
           return { success: false, error: "No text selected." };
         }
 
-        try {
-          await navigator.clipboard.writeText(selection);
-          return { success: true, selection };
-        } catch (error) {
-          return {
-            success: false,
-            error: error instanceof Error ? error.message : String(error)
-          };
-        }
+        return { success: true, selection };
       }
     });
 
@@ -47,12 +39,33 @@ async function handleClipRequest() {
   return clipSelection(tab.id);
 }
 
+function broadcastClipResult(result, requestId = null) {
+  const message = {
+    type: "clip-selection-serialized",
+    requestId,
+    ...result
+  };
+
+  try {
+    const maybePromise = chrome.runtime.sendMessage(message);
+    if (maybePromise && typeof maybePromise.catch === "function") {
+      maybePromise.catch((error) => {
+        console.warn("Unable to broadcast clip result:", error);
+      });
+    }
+  } catch (error) {
+    console.warn("Unable to broadcast clip result:", error);
+  }
+}
+
 chrome.commands.onCommand.addListener(async (command) => {
   if (command !== "clip-selection") {
     return;
   }
 
   const result = await handleClipRequest();
+  broadcastClipResult(result);
+
   if (!result.success) {
     console.warn("Clip command failed:", result.error);
   }
@@ -63,6 +76,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return;
   }
 
-  handleClipRequest().then(sendResponse);
+  handleClipRequest().then((result) => {
+    broadcastClipResult(result, message.requestId ?? null);
+    sendResponse({ acknowledged: true });
+  });
+
   return true;
 });
