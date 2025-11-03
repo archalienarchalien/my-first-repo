@@ -22,5 +22,17 @@
     "clip-selection": {
       "description": "Clip the selection on the active tab"
     }
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "readability.js",
+        "contentScript.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
 }
