@@ -1,0 +1,9 @@
+{
+  "name": "readability-extension",
+  "version": "1.0.0",
+  "description": "Browser extension for improved readability.",
+  "private": true,
+  "scripts": {
+    "test": "node scripts/validate-extension.js"
+  }
+}
