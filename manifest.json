@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Page Clipper",
   "version": "1.0.0",
-  "description": "Clip the selected text from the current tab to the clipboard.",
+  "description": "Clip the main article content from the current tab into a Tana-ready format.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -16,11 +16,11 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Clip selection"
+    "default_title": "Copy article to Tana"
   },
   "commands": {
     "clip-selection": {
-      "description": "Clip the selection on the active tab"
+      "description": "Copy the main article on the active tab"
     }
   },
   "content_scripts": [

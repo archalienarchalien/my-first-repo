@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Clip Selection</title>
+    <title>Clip Article</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -11,29 +11,15 @@
         padding: 16px;
       }
 
-      button {
-        background-color: #2563eb;
-        border: none;
-        color: white;
-        padding: 8px 12px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-      }
-
-      button:hover {
-        background-color: #1d4ed8;
-      }
-
       #status {
-        margin-top: 12px;
+        min-height: 24px;
         font-size: 12px;
         color: #1f2937;
+        white-space: pre-wrap;
       }
     </style>
   </head>
   <body>
-    <button id="clip">Clip Selection</button>
     <div id="status" role="status" aria-live="polite"></div>
     <script src="popup.js"></script>
   </body>

@@ -313,15 +313,44 @@
   }
 
   function extractArticle() {
+    const articleInfo = findMainArticle();
+    return buildArticleData(articleInfo);
+  }
+
+  function notifyBackground(article) {
     try {
-      const articleInfo = findMainArticle();
-      const articleData = buildArticleData(articleInfo);
-      chrome.runtime?.sendMessage({ type: 'articleExtracted', payload: articleData });
-      console.info('Article data extracted:', articleData);
+      chrome.runtime?.sendMessage({ type: 'articleExtracted', payload: article });
+    } catch (error) {
+      console.warn('Unable to notify background script about article extraction:', error);
+    }
+  }
+
+  function extractAndNotify() {
+    try {
+      const article = extractArticle();
+      notifyBackground(article);
+      console.info('Article data extracted:', article);
     } catch (error) {
       console.error('Failed to extract article data:', error);
     }
   }
 
-  whenReady(extractArticle);
+  whenReady(extractAndNotify);
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message?.type !== 'request-article') {
+      return false;
+    }
+
+    try {
+      const article = extractArticle();
+      notifyBackground(article);
+      sendResponse({ success: true, article });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      sendResponse({ success: false, error: errorMessage });
+    }
+
+    return false;
+  });
 })();
