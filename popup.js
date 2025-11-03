@@ -123,7 +123,7 @@ async function clipSelectionFromPopup() {
       ? `${result.selection.slice(0, 77)}…`
       : result.selection;
 
-    setStatus(`Copied: "${selectionPreview}"`);
+    setStatus(selectionPreview ? `Copied: "${selectionPreview}"` : "Clipping copied to clipboard.");
   } catch (error) {
     setStatus(error instanceof Error ? error.message : String(error), true);
   }
